@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LE CHAUFFEUR - Spectacle d'Humour par Abdoul Aziz Ossa</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Jost:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              green: '#0B6623',
+              emerald: '#0F5257',
+              flagGreen: '#008751',
+              yellow: '#FFD700',
+              canary: '#FFCE00',
+              red: '#E50914',
+              brightRed: '#FF3838',
+              darkBg: '#121212',
+              cardBg: '#1E1E1E'
+            }
+          },
+          fontFamily: {
+            bebas: ['"Bebas Neue"', 'sans-serif'],
+            montserrat: ['Montserrat', 'sans-serif'],
+            anton: ['Anton', 'sans-serif'],
+            jost: ['Jost', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Global Styles & Animations */
+    body {
+      font-family: 'Jost', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .font-bebas { font-family: 'Bebas Neue', cursive, sans-serif; }
+    .font-anton { font-family: 'Anton', sans-serif; }
+    .font-montserrat { font-family: 'Montserrat', sans-serif; }
+
+    /* Custom Urban Traffic Sign Style */
+    .road-sign {
+      background: linear-gradient(135deg, #0B6623, #008751);
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      border-radius: 8px;
+    }
+
+    .road-sign-yellow {
+      background: #FFD700;
+      color: #121212;
+      border: 3px solid #121212;
+      box-shadow: 0 8px 20px rgba(255,215,0,0.3);
+    }
+
+    /* Pulse Glow Animation for CTA Buttons */
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.7), 0 0 30px rgba(255, 215, 0, 0.4);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 25px rgba(239, 68, 68, 0.9), 0 0 45px rgba(255, 215, 0, 0.8);
+        transform: scale(1.03);
+      }
+    }
+
+    .btn-pulse {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    /* Scroll Animation Observer Classes */
+    .reveal-element {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+
+    .reveal-element.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Traffic Light Animation */
+    .light-circle {
+      transition: all 0.4s ease;
+      opacity: 0.25;
+      filter: blur(1px);
+    }
+
+    .light-circle.active {
+      opacity: 1;
+      filter: blur(0px) drop-shadow(0 0 12px currentColor);
+    }
+
+    /* Disable animations if user prefers reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-element {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      .btn-pulse {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-brand-yellow selection:text-black">
+
+  <!-- ========================================== -->
+  <!-- ÉCRAN DE DÉMARRAGE (SPLASH SCREEN)         -->
+  <!-- ========================================== -->
+  <div id="splash-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950 p-4 transition-opacity duration-700">
+    <div class="text-center max-w-sm w-full bg-zinc-900/90 border-2 border-brand-yellow/30 p-6 rounded-2xl shadow-2xl backdrop-blur-md">
+      
+      <!-- Traffic Light Graphics -->
+      <div class="mb-6 flex justify-center">
+        <div class="bg-zinc-950 p-3 rounded-2xl border-2 border-zinc-700 flex flex-col gap-3 shadow-inner w-20 items-center">
+          <div id="light-red" class="light-circle w-10 h-10 rounded-full bg-red-600 text-red-500 active"></div>
+          <div id="light-yellow" class="light-circle w-10 h-10 rounded-full bg-yellow-400 text-yellow-300"></div>
+          <div id="light-green" class="light-circle w-10 h-10 rounded-full bg-emerald-500 text-emerald-400"></div>
+        </div>
+      </div>
+
+      <!-- Welcome Text -->
+      <h1 class="font-bebas text-3xl tracking-wide text-brand-yellow mb-1">
+        ABIDJAN EN EMBOUTEILLAGE !
+      </h1>
+      <p class="text-xs text-zinc-300 mb-6 uppercase tracking-wider font-montserrat">
+        "Le Chauffeur" prend le volant...
+      </p>
+
+      <!-- Start Button -->
+      <button id="start-btn" onclick="startJourney()" class="w-full py-4 px-6 bg-gradient-to-r from-brand-green to-emerald-600 hover:from-emerald-600 hover:to-brand-green text-white font-montserrat font-black text-lg rounded-xl shadow-lg border border-emerald-300 transform active:scale-95 transition-all flex items-center justify-center gap-3 group">
+        <i class="fa-solid fa-car-side text-brand-yellow group-hover:translate-x-1 transition-transform"></i>
+        <span>EMBARQUEZ MAINTENANT</span>
+      </button>
+      
+      <p class="text-[10px] text-zinc-500 mt-4">
+        <i class="fa-solid fa-volume-high mr-1"></i> Cliquez pour lancer le moteur et accéder au site
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ========================================== -->
+  <!-- NAVIGATION BAR                             -->
+  <!-- ========================================== -->
+  <nav class="sticky top-0 z-40 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800 px-4 py-3">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <!-- Brand Logo / Title -->
+      <a href="#" class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-brand-yellow text-black flex items-center justify-center font-black font-bebas text-xl">
+          LC
+        </div>
+        <span class="font-bebas text-xl text-white tracking-wider">
+          LE CHAUFFEUR <span class="text-brand-yellow text-xs font-montserrat px-1 bg-brand-green rounded">SHOW</span>
+        </span>
+      </a>
+
+      <!-- Quick Call Button Mobile -->
+      <a href="tel:+2250779398871" class="px-3 py-1.5 bg-brand-red hover:bg-red-700 text-white rounded-lg text-xs font-bold font-montserrat flex items-center gap-1.5 transition">
+        <i class="fa-solid fa-phone"></i>
+        <span class="hidden sm:inline">Réserver</span>
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- ========================================== -->
+  <!-- SECTION 1: ACCUEIL / HERO                  -->
+  <!-- ========================================== -->
+  <section id="accueil" class="relative min-h-[90vh] flex flex-col justify-center items-center px-4 py-12 bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 overflow-hidden">
+    
+    <!-- Background Deco Patterns (Road signs style) -->
+    <div class="absolute top-10 left-4 rotate-[-12deg] opacity-20 pointer-events-none hidden md:block">
+      <div class="road-sign p-4 text-center text-white font-bebas text-2xl">
+        YOPNOUGOUN ➔
+      </div>
+    </div>
+    <div class="absolute bottom-10 right-4 rotate-[8deg] opacity-20 pointer-events-none hidden md:block">
+      <div class="road-sign-yellow p-4 text-center font-bebas text-2xl">
+        🛑 TREICHVILLE
+      </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto text-center z-10 reveal-element">
+      
+      <!-- Artist Badge -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-zinc-800/80 border border-brand-yellow/40 rounded-full text-brand-yellow text-xs font-montserrat font-bold uppercase tracking-widest mb-4">
+        <i class="fa-solid fa-star text-brand-yellow"></i>
+        Abdoul Aziz Ossa
+      </div>
+
+      <!-- Main Title -->
+      <h1 class="font-bebas text-6xl sm:text-8xl md:text-9xl leading-none tracking-tight text-white drop-shadow-lg mb-2">
+        « LE CHAUFFEUR »
+      </h1>
+      
+      <p class="text-zinc-300 font-montserrat text-base sm:text-xl max-w-xl mx-auto mb-6">
+        Un spectacle d'humour décapant au cœur du quotidien abidjanais, de la circulation et de ses histoires rocambolesques !
+      </p>
+
+      <!-- Event Key Info Box -->
+      <div class="bg-zinc-900/90 border-2 border-brand-green p-4 sm:p-6 rounded-2xl max-w-xl mx-auto mb-8 shadow-2xl backdrop-blur-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+          
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-green/20 text-brand-green flex items-center justify-center shrink-0 border border-brand-green/40">
+              <i class="fa-solid fa-calendar-day text-lg"></i>
+            </div>
+            <div>
+              <span class="text-xs text-zinc-400 font-montserrat block uppercase">Date & Heure</span>
+              <span class="text-lg font-bold font-montserrat text-brand-yellow">19 Décembre à 18h00</span>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-yellow/20 text-brand-yellow flex items-center justify-center shrink-0 border border-brand-yellow/40">
+              <i class="fa-solid fa-location-dot text-lg"></i>
+            </div>
+            <div>
+              <span class="text-xs text-zinc-400 font-montserrat block uppercase">Lieu</span>
+              <span class="text-base font-bold font-montserrat text-white">Palais de la Culture</span>
+              <span class="text-xs text-zinc-400 block">Salle Niangoran Porquet</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Countdown Timer -->
+      <div class="mb-10">
+        <h3 class="text-xs font-montserrat font-bold text-zinc-400 uppercase tracking-widest mb-3">
+          Le départ est prévu dans :
+        </h3>
+        <div class="grid grid-cols-4 gap-2 sm:gap-4 max-w-md mx-auto">
+          
+          <div class="bg-zinc-900 border border-zinc-800 p-3 rounded-xl text-center">
+            <span id="timer-days" class="font-anton text-2xl sm:text-4xl text-brand-yellow block">00</span>
+            <span class="text-[10px] sm:text-xs text-zinc-400 font-montserrat uppercase">Jours</span>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 p-3 rounded-xl text-center">
+            <span id="timer-hours" class="font-anton text-2xl sm:text-4xl text-brand-yellow block">00</span>
+            <span class="text-[10px] sm:text-xs text-zinc-400 font-montserrat uppercase">Heures</span>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 p-3 rounded-xl text-center">
+            <span id="timer-minutes" class="font-anton text-2xl sm:text-4xl text-brand-yellow block">00</span>
+            <span class="text-[10px] sm:text-xs text-zinc-400 font-montserrat uppercase">Min</span>
+          </div>
+
+          <div class="bg-zinc-900 border border-zinc-800 p-3 rounded-xl text-center">
+            <span id="timer-seconds" class="font-anton text-2xl sm:text-4xl text-brand-red block">00</span>
+            <span class="text-[10px] sm:text-xs text-zinc-400 font-montserrat uppercase">Sec</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Main CTA Button -->
+      <a href="#tarifs" class="inline-flex items-center justify-center gap-3 py-4 px-8 bg-brand-red hover:bg-red-700 text-white font-montserrat font-black text-lg rounded-2xl shadow-xl transition-all btn-pulse">
+        <i class="fa-solid fa-ticket"></i>
+        <span>RÉSERVER MA PLACE</span>
+      </a>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================== -->
+  <!-- SECTION 2: À PROPOS                        -->
+  <!-- ========================================== -->
+  <section id="a-propos" class="py-16 px-4 bg-zinc-900/60 border-t border-b border-zinc-800">
+    <div class="max-w-4xl mx-auto reveal-element">
+      
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-2 bg-brand-yellow rounded-full"></div>
+        <h2 class="font-bebas text-4xl sm:text-5xl text-white tracking-wide">
+          À PROPOS DU SPECTACLE
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 gap-8 items-center">
+        
+        <!-- Description Content -->
+        <div class="md:col-span-1 space-y-4 text-zinc-300 font-jost text-base sm:text-lg leading-relaxed">
+          <p>
+            Attachez vos ceintures ! Dans <strong class="text-white">« LE CHAUFFEUR »</strong>, l'humoriste <strong class="text-brand-yellow">Abdoul Aziz Ossa</strong> vous embarque dans un voyage tordant à travers la jungle urbaine d'Abidjan.
+          </p>
+          <p>
+            Des embouteillages interminables de <strong class="text-white">Yopougon</strong> aux feux de signalisation de <strong class="text-white">Treichville</strong>, en passant par les discussions improbables entre apprentis gbaka, clients pressés et "jolis clients", personne n'est épargné !
+          </p>
+          <p class="bg-zinc-800/80 p-4 rounded-xl border-l-4 border-brand-yellow text-white italic text-sm sm:text-base">
+            « En Côte d'Ivoire, le chauffeur ne te transporte pas seulement : il gère ta vie, tes humeurs et tes secrets pendant tout le trajet ! »
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================== -->
+  <!-- SECTION 3: TARIFS & BILLETTERIE            -->
+  <!-- ========================================== -->
+  <section id="tarifs" class="py-16 px-4 bg-zinc-950">
+    <div class="max-w-4xl mx-auto reveal-element">
+      
+      <div class="text-center mb-12">
+        <span class="text-xs font-montserrat font-bold text-brand-yellow uppercase tracking-widest block mb-2">
+          Choisissez votre catégorie
+        </span>
+        <h2 class="font-bebas text-4xl sm:text-6xl text-white">
+          TARIFS & TICKETS
+        </h2>
+      </div>
+
+      <!-- Pricing Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        
+        <!-- CARD 1: 5.000 F -->
+        <div class="bg-zinc-900 border-2 border-zinc-700 hover:border-brand-yellow rounded-2xl p-6 transition-all shadow-xl relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute -right-8 -top-8 w-24 h-24 bg-brand-yellow/10 rounded-full blur-xl"></div>
+          <div>
+            <div class="inline-block px-3 py-1 bg-zinc-800 text-brand-yellow font-montserrat text-xs font-bold rounded-full mb-4">
+              PLACE CLASSIQUE
+            </div>
+            <h3 class="font-bebas text-3xl text-white mb-2">JOLIS CLIENTS</h3>
+            <p class="text-xs text-zinc-400 mb-6">Accès standard à la salle Niangoran Porquet, placement confortable.</p>
+            
+            <div class="mb-6">
+              <span class="font-anton text-5xl text-brand-yellow">5.000</span>
+              <span class="text-sm text-zinc-400 font-montserrat"> F CFA</span>
+            </div>
+          </div>
+
+          <a href="#reservation" onclick="selectTicket('classic')" class="w-full py-3 px-4 bg-brand-green hover:bg-emerald-600 text-white font-montserrat font-bold text-sm rounded-xl transition text-center flex items-center justify-center gap-2">
+            <i class="fa-solid fa-ticket text-lg"></i>
+            <span>Réserver à 5.000 F</span>
+          </a>
+        </div>
+
+        <!-- CARD 2: 10.000 F -->
+        <div class="bg-zinc-900 border-2 border-brand-yellow rounded-2xl p-6 transition-all shadow-2xl relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-0 right-0 bg-brand-yellow text-zinc-950 text-[10px] font-black font-montserrat px-3 py-1 rounded-bl-xl uppercase tracking-wider">
+            Recommandé
+          </div>
+          <div>
+            <div class="inline-block px-3 py-1 bg-brand-yellow/20 text-brand-yellow font-montserrat text-xs font-bold rounded-full mb-4">
+              VIP / PRIVILÈGE
+            </div>
+            <h3 class="font-bebas text-3xl text-white mb-2">CLIENTS DEBOUTS</h3>
+            <p class="text-xs text-zinc-400 mb-6">Place privilégiée devant la scène + accueil VIP.</p>
+            
+            <div class="mb-6">
+              <span class="font-anton text-5xl text-brand-yellow">10.000</span>
+              <span class="text-sm text-zinc-400 font-montserrat"> F CFA</span>
+            </div>
+          </div>
+
+          <a href="#reservation" onclick="selectTicket('vip')" class="w-full py-3 px-4 bg-brand-yellow hover:bg-yellow-400 text-zinc-950 font-montserrat font-black text-sm rounded-xl transition text-center flex items-center justify-center gap-2">
+            <i class="fa-solid fa-ticket text-lg"></i>
+            <span>Réserver VIP à 10.000 F</span>
+          </a>
+        </div>
+
+      </div>
+
+
+      <!-- FORMULAIRE DE PRÉ-RÉSERVATION -->
+      <div id="reservation" class="mt-12 bg-zinc-900 border-2 border-brand-green rounded-2xl p-5 sm:p-8 shadow-2xl scroll-mt-24">
+        <div class="text-center mb-7">
+          <span class="text-xs font-montserrat font-bold text-brand-yellow uppercase tracking-widest">Réservation & transfert manuel</span>
+          <h3 class="font-bebas text-3xl sm:text-4xl text-white mt-1">RÉSERVEZ VOTRE TICKET</h3>
+          <p class="text-sm text-zinc-400 mt-2">Remplissez le formulaire. Effectuez le transfert au numéro indiqué, puis envoyez votre demande avec la référence de paiement.</p>
+        </div>
+
+        <form id="booking-form" class="space-y-4" onsubmit="sendBookingToWhatsApp(event)">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="customer-name" class="block text-xs font-montserrat font-bold text-zinc-300 mb-2">Nom et prénom *</label>
+              <input id="customer-name" name="name" required autocomplete="name" class="w-full rounded-xl bg-zinc-950 border border-zinc-700 focus:border-brand-yellow focus:outline-none px-4 py-3 text-white" placeholder="Votre nom complet">
+            </div>
+            <div>
+              <label for="customer-phone" class="block text-xs font-montserrat font-bold text-zinc-300 mb-2">Numéro WhatsApp *</label>
+              <input id="customer-phone" name="phone" type="tel" required autocomplete="tel" class="w-full rounded-xl bg-zinc-950 border border-zinc-700 focus:border-brand-yellow focus:outline-none px-4 py-3 text-white" placeholder="Ex. 07 00 00 00 00">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="ticket-type" class="block text-xs font-montserrat font-bold text-zinc-300 mb-2">Catégorie de ticket *</label>
+              <select id="ticket-type" name="ticket" required onchange="updateBookingTotal()" class="w-full rounded-xl bg-zinc-950 border border-zinc-700 focus:border-brand-yellow focus:outline-none px-4 py-3 text-white">
+                <option value="classic">Jolis Clients — 5 000 FCFA</option>
+                <option value="vip">Clients Debouts VIP — 10 000 FCFA</option>
+              </select>
+            </div>
+            <div>
+              <label for="ticket-quantity" class="block text-xs font-montserrat font-bold text-zinc-300 mb-2">Nombre de tickets *</label>
+              <input id="ticket-quantity" name="quantity" type="number" min="1" max="20" value="1" required oninput="updateBookingTotal()" class="w-full rounded-xl bg-zinc-950 border border-zinc-700 focus:border-brand-yellow focus:outline-none px-4 py-3 text-white">
+            </div>
+          </div>
+
+          <div class="rounded-xl bg-zinc-950 border border-zinc-800 p-4 flex items-center justify-between gap-3">
+            <span class="text-sm text-zinc-300 font-montserrat">Montant à transférer</span>
+            <strong id="booking-total" class="font-anton text-2xl text-brand-yellow">5 000 FCFA</strong>
+          </div>
+
+          <div>
+            <label for="payment-method" class="block text-xs font-montserrat font-bold text-zinc-300 mb-2">Moyen de transfert choisi *</label>
+            <select id="payment-method" name="payment" required class="w-full rounded-xl bg-zinc-950 border border-zinc-700 focus:border-brand-yellow focus:outline-none px-4 py-3 text-white">
+              <option value="Orange Money">Orange Money</option>
+              <option value="MTN Mobile Money">MTN Mobile Money</option>
+              <option value="Wave">Wave</option>
+            </select>
+            <div class="mt-3 rounded-xl border border-brand-green/50 bg-brand-green/10 p-4">
+              <p class="text-xs text-zinc-300 font-montserrat">Numéro communiqué pour le paiement</p>
+              <p class="mt-1 text-2xl font-anton tracking-wider text-brand-yellow">+225 01 04 70 83 52</p>
+              <p class="mt-2 text-[11px] text-zinc-400">Effectuez le transfert via le moyen choisi, puis indiquez la référence de la transaction ci-dessous. Le ticket sera confirmé après vérification du paiement.</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="transfer-reference" class="block text-xs font-montserrat font-bold text-zinc-300 mb-2">Référence du transfert (facultatif)</label>
+            <input id="transfer-reference" name="reference" class="w-full rounded-xl bg-zinc-950 border border-zinc-700 focus:border-brand-yellow focus:outline-none px-4 py-3 text-white" placeholder="À remplir si vous avez déjà effectué le transfert">
+          </div>
+
+          <div class="rounded-xl border border-brand-yellow/30 bg-brand-yellow/5 p-4 text-xs text-zinc-300 leading-relaxed">
+            <i class="fa-solid fa-circle-info text-brand-yellow mr-1"></i>
+            <strong class="text-brand-yellow">Important :</strong> cette étape est une demande de réservation, pas encore un ticket valide. Effectuez le transfert au numéro indiqué ci-dessus et transmettez la référence de la transaction. Votre ticket définitif sera délivré après vérification du paiement.
+          </div>
+
+          <button type="submit" class="w-full py-4 px-5 bg-brand-green hover:bg-emerald-600 text-white font-montserrat font-black rounded-xl transition flex items-center justify-center gap-2">
+            <i class="fa-brands fa-whatsapp text-xl"></i> ENVOYER MA DEMANDE SUR WHATSAPP
+          </button>
+          <p id="booking-status" role="status" aria-live="polite" class="text-xs text-center text-zinc-300"></p>
+          <p class="text-[10px] text-zinc-500 text-center">Votre demande sera d’abord enregistrée dans la base de données, puis transmise à l’équipe via WhatsApp.</p>
+        </form>
+      </div>
+
+      <!-- Hotline Direct Booking Box -->
+      <div class="bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 p-6 rounded-2xl border border-zinc-700 text-center">
+        <p class="text-sm text-zinc-300 font-montserrat mb-4">
+          Besoin d'aide ou de réservation par téléphone direct ?
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href="tel:+2250779398871" class="px-5 py-2.5 bg-zinc-950 hover:bg-black border border-zinc-700 rounded-xl text-white font-montserrat text-xs sm:text-sm font-bold flex items-center gap-2">
+            <i class="fa-solid fa-phone text-brand-yellow"></i> +225 07 79 39 88 71
+          </a>
+          <a href="https://wa.me/2250779398871" target="_blank" rel="noopener" class="px-5 py-2.5 bg-zinc-950 hover:bg-black border border-zinc-700 rounded-xl text-white font-montserrat text-xs sm:text-sm font-bold flex items-center gap-2">
+            <i class="fa-brands fa-whatsapp text-brand-green"></i> WhatsApp : +225 07 79 39 88 71
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================== -->
+  <!-- SECTION 4: DISTRIBUTION & LES ACTEURS     -->
+  <!-- ========================================== -->
+  <section id="acteurs" class="py-16 px-4 bg-zinc-900/40 border-t border-zinc-800">
+    <div class="max-w-6xl mx-auto reveal-element">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-2 bg-brand-yellow rounded-full"></div>
+            <span class="text-xs font-montserrat font-bold text-brand-yellow uppercase tracking-widest">Sur scène le 19 Décembre</span>
+          </div>
+          <h2 class="font-bebas text-4xl sm:text-6xl text-white tracking-wide">
+            DISTRIBUTION & COMÉDIENS
+          </h2>
+        </div>
+        <p class="text-xs text-zinc-400 font-montserrat max-w-sm">
+          Découvrez les 8 visages et talents qui vont enflammer la salle Niangoran Porquet.
+        </p>
+      </div>
+
+      <!-- 8 Actors Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        
+        <!-- ACTEUR 1 -->
+        <div class="bg-zinc-900 border border-zinc-800 hover:border-brand-yellow/60 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between">
+          <div class="p-4 text-left border-t border-zinc-800/80 bg-zinc-900">
+            <h3 class="font-bebas text-2xl text-brand-yellow leading-tight mb-1">ABDOUL AZIZ OSSA</h3>
+            <p class="text-xs font-montserrat font-bold text-white uppercase tracking-wider">Le Chauffeur Principal</p>
+          </div>
+        </div>
+
+        <!-- ACTEUR 2 -->
+        <div class="bg-zinc-900 border border-zinc-800 hover:border-brand-yellow/60 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between">
+          <div class="p-4 text-left border-t border-zinc-800/80 bg-zinc-900">
+            <h3 class="font-bebas text-2xl text-white leading-tight mb-1">L'APPRENTI GBAKA</h3>
+            <p class="text-xs font-montserrat font-bold text-brand-green uppercase tracking-wider">Comédien Rôle 2</p>
+          </div>
+        </div>
+
+        <!-- ACTEUR 3 -->
+        <div class="bg-zinc-900 border border-zinc-800 hover:border-brand-yellow/60 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between">
+          <div class="p-4 text-left border-t border-zinc-800/80 bg-zinc-900">
+            <h3 class="font-bebas text-2xl text-white leading-tight mb-1">LE CLIENT PRESSÉ</h3>
+            <p class="text-xs font-montserrat font-bold text-brand-yellow uppercase tracking-wider">Comédien Rôle 3</p>
+          </div>
+        </div>
+
+        <!-- ACTEUR 4 -->
+        <div class="bg-zinc-900 border border-zinc-800 hover:border-brand-yellow/60 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between">
+          <div class="p-4 text-left border-t border-zinc-800/80 bg-zinc-900">
+            <h3 class="font-bebas text-2xl text-white leading-tight mb-1">LA JOLIE CLIENTE</h3>
+            <p class="text-xs font-montserrat font-bold text-brand-red uppercase tracking-wider">Comédienne Rôle 4</p>
+          </div>
+        </div>
+
+        <!-- ACTEUR 5 -->
+        <div class="bg-zinc-900 border border-zinc-800 hover:border-brand-yellow/60 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between">
+          <div class="p-4 text-left border-t border-zinc-800/80 bg-zinc-900">
+            <h3 class="font-bebas text-2xl text-white leading-tight mb-1">LE POLICIER ROUTIER</h3>
+            <p class="text-xs font-montserrat font-bold text-brand-yellow uppercase tracking-wider">Comédien Rôle 5</p>
+          </div>
+        </div>
+
+        <!-- ACTEUR 6 -->
+        <div class="bg-zinc-900 border border-zinc-800 hover:border-brand-yellow/60 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between">
+          <div class="p-4 text-left border-t border-zinc-800/80 bg-zinc-900">
+            <h3 class="font-bebas text-2xl text-white leading-tight mb-1">LE SYNDICAT / COXER</h3>
+            <p class="text-xs font-montserrat font-bold text-brand-green uppercase tracking-wider">Comédien Rôle 6</p>
+          </div>
+        </div>
+
+        <!-- ACTEUR 7 -->
+        <div class="bg-zinc-900 border border-zinc-800 hover:border-brand-yellow/60 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between">
+          <div class="p-4 text-left border-t border-zinc-800/80 bg-zinc-900">
+            <h3 class="font-bebas text-2xl text-white leading-tight mb-1">LA COMMERÇANTE</h3>
+            <p class="text-xs font-montserrat font-bold text-brand-red uppercase tracking-wider">Comédienne Rôle 7</p>
+          </div>
+        </div>
+
+        <!-- ACTEUR 8 -->
+        <div class="bg-zinc-900 border border-zinc-800 hover:border-brand-yellow/60 rounded-2xl transition-all duration-300 shadow-xl flex flex-col justify-between">
+          <div class="p-4 text-left border-t border-zinc-800/80 bg-zinc-900">
+            <h3 class="font-bebas text-2xl text-white leading-tight mb-1">LE PASSAGER VIP</h3>
+            <p class="text-xs font-montserrat font-bold text-brand-yellow uppercase tracking-wider">Comédien Rôle 8</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================== -->
+  <!-- SECTION 5: LIEU & ACCÈS                    -->
+  <!-- ========================================== -->
+  <section id="lieu" class="py-16 px-4 bg-zinc-950">
+    <div class="max-w-4xl mx-auto reveal-element">
+      
+      <div class="text-center mb-8">
+        <h2 class="font-bebas text-4xl sm:text-5xl text-white">
+          LIEU DE L'ÉVÉNEMENT
+        </h2>
+        <p class="text-sm text-brand-yellow font-montserrat">
+          Palais de la Culture, Salle Niangoran Porquet, Abidjan (Côte d'Ivoire)
+        </p>
+      </div>
+
+      <!-- Map Container -->
+      <div class="bg-zinc-900 border-2 border-zinc-800 rounded-2xl overflow-hidden shadow-2xl mb-6">
+        <div class="w-full h-64 sm:h-80">
+          <!-- Google Maps Iframe for Palais de la Culture Abidjan -->
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3972.502931499522!2d-4.004245924239849!3d5.339893994638708!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1116139121c21123%3A0xb351e231bcbe92ba!2sPalais%20de%20la%20Culture%20d'Abidjan!5e0!3m2!1sfr!2sci!4v1710000000000!5m2!1sfr!2sci" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- GPS Launch Button -->
+      <div class="text-center">
+        <a href="https://maps.google.com/?q=Palais+de+la+Culture+Abidjan" target="_blank" rel="noopener" class="inline-flex items-center gap-2 py-3 px-6 bg-zinc-800 hover:bg-zinc-700 text-white font-montserrat font-bold text-sm rounded-xl border border-zinc-600 transition">
+          <i class="fa-solid fa-diamond-turn-right text-brand-yellow"></i>
+          <span>LANCER L'ITINÉRAIRE GPS</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================== -->
+  <!-- SECTION 6: INFOS PRATIQUES & CONTACTS      -->
+  <!-- ========================================== -->
+  <section id="contacts" class="py-16 px-4 bg-zinc-900/80 border-t border-zinc-800">
+    <div class="max-w-4xl mx-auto reveal-element">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        
+        <!-- Contact Block -->
+        <div>
+          <h3 class="font-bebas text-3xl text-brand-yellow mb-4">
+            INFOS & RÉSERVATIONS
+          </h3>
+          <p class="text-sm text-zinc-300 font-jost mb-6">
+            Pour toute question concernant le placement, les réservations de groupe ou les partenariats :
+          </p>
+          
+          <ul class="space-y-4">
+            <li>
+              <a href="tel:+2250779398871" class="flex items-center gap-3 text-white hover:text-brand-yellow transition font-montserrat font-bold text-base">
+                <div class="w-10 h-10 rounded-lg bg-brand-green/30 text-brand-green flex items-center justify-center">
+                  <i class="fa-solid fa-phone"></i>
+                </div>
+                <span>+225 07 79 39 88 71</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Local Transport Block -->
+        <div>
+          <h3 class="font-bebas text-3xl text-brand-yellow mb-4">
+            ACCÈS TRANSPORT
+          </h3>
+          <div class="space-y-3 font-jost text-sm text-zinc-300">
+            <div class="p-3 bg-zinc-950 rounded-xl border border-zinc-800 flex items-start gap-3">
+              <i class="fa-solid fa-bus text-brand-yellow mt-1"></i>
+              <div>
+                <strong class="text-white block">SOTRA / Bus :</strong>
+                Lignes desservant Treichville / Pont Général de Gaulle.
+              </div>
+            </div>
+            <div class="p-3 bg-zinc-950 rounded-xl border border-zinc-800 flex items-start gap-3">
+              <i class="fa-solid fa-taxi text-brand-yellow mt-1"></i>
+              <div>
+                <strong class="text-white block">Wôrô-wôrô & Gbaka :</strong>
+                Arrêt recommandé : Palais de la Culture / Gare Treichville.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================== -->
+  <!-- FOOTER                                     -->
+  <!-- ========================================== -->
+  <footer class="py-10 px-4 bg-zinc-950 border-t border-zinc-800 text-center text-xs text-zinc-500 font-montserrat">
+    <div class="max-w-4xl mx-auto space-y-6">
+      
+      <!-- Organizers Mentions -->
+      <div class="flex flex-wrap justify-center items-center gap-6 text-zinc-400 font-bold uppercase tracking-wider text-[11px]">
+        <span>TOZAR</span>
+        <span>•</span>
+        <span>CNAC</span>
+        <span>•</span>
+        <span>MINISTÈRE DE LA CULTURE</span>
+      </div>
+
+      <!-- Social Share Links -->
+      <div class="flex justify-center gap-4">
+        <a href="https://api.whatsapp.com/send?text=Découvre%20le%20spectacle%20LE%20CHAUFFEUR%20par%20Abdoul%20Aziz%20Ossa%20le%2019%20décembre%20au%20Palais%20de%20la%20Culture%20!" target="_blank" class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-brand-green transition">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php" target="_blank" class="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300 hover:text-blue-500 transition">
+          <i class="fa-brands fa-facebook-f text-lg"></i>
+        </a>
+      </div>
+
+      <p>© 2026 Spectacle « LE CHAUFFEUR » par Abdoul Aziz Ossa - Tous droits réservés.</p>
+    </div>
+  </footer>
+
+
+  <!-- Supabase JS client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT LOGIC                           -->
+  <!-- ========================================== -->
+  <script>
+    // ------------------------------------------
+    // 1. WEB AUDIO SYNTHESIZER (Engine/Horn sound)
+    // ------------------------------------------
+    function playEngineStartSound() {
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+
+        // Engine Rev Sound
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.3);
+        osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.8);
+
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + 0.8);
+      } catch (e) {
+        console.log('Audio Context restricted or not supported');
+      }
+    }
+
+    // ------------------------------------------
+    // 2. SPLASH SCREEN & TRAFFIC LIGHT ANIMATION
+    // ------------------------------------------
+    function startJourney() {
+      const redLight = document.getElementById('light-red');
+      const yellowLight = document.getElementById('light-yellow');
+      const greenLight = document.getElementById('light-green');
+      const splash = document.getElementById('splash-screen');
+
+      // Play Sound Effect
+      playEngineStartSound();
+
+      // Traffic Light Sequence
+      setTimeout(() => {
+        redLight.classList.remove('active');
+        yellowLight.classList.add('active');
+      }, 200);
+
+      setTimeout(() => {
+        yellowLight.classList.remove('active');
+        greenLight.classList.add('active');
+      }, 500);
+
+      // Fade Out Splash
+      setTimeout(() => {
+        splash.classList.add('opacity-0');
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 700);
+      }, 800);
+    }
+
+    // ------------------------------------------
+    // 3. COUNTDOWN TIMER LOGIC
+    // ------------------------------------------
+    function initCountdown() {
+      // Set Target Date: December 19th 18:00
+      const currentYear = new Date().getFullYear();
+      let targetDate = new Date(`December 19, ${currentYear} 18:00:00`).getTime();
+      
+      // If December 19 18:00 has passed this year, set for next year
+      if (new Date().getTime() > targetDate) {
+        targetDate = new Date(`December 19, ${currentYear + 1} 18:00:00`).getTime();
+      }
+
+      function updateTimer() {
+        const now = new Date().getTime();
+        const difference = targetDate - now;
+
+        if (difference <= 0) {
+          document.getElementById('timer-days').innerText = '00';
+          document.getElementById('timer-hours').innerText = '00';
+          document.getElementById('timer-minutes').innerText = '00';
+          document.getElementById('timer-seconds').innerText = '00';
+          return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById('timer-days').innerText = days < 10 ? '0' + days : days;
+        document.getElementById('timer-hours').innerText = hours < 10 ? '0' + hours : hours;
+        document.getElementById('timer-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+        document.getElementById('timer-seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+      }
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    }
+
+    // ------------------------------------------
+    // 4. INTERSECTION OBSERVER FOR SCROLL ANIM
+    // ------------------------------------------
+    function initScrollAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      document.querySelectorAll('.reveal-element').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+
+    // ------------------------------------------
+    // 5. BOOKING REQUEST (MANUAL MOBILE MONEY)
+    // ------------------------------------------
+    const ticketPrices = { classic: 5000, vip: 10000 };
+
+    function selectTicket(type) {
+      const select = document.getElementById('ticket-type');
+      if (select && ticketPrices[type]) {
+        select.value = type;
+        updateBookingTotal();
+      }
+    }
+
+    function updateBookingTotal() {
+      const type = document.getElementById('ticket-type');
+      const quantity = document.getElementById('ticket-quantity');
+      const total = document.getElementById('booking-total');
+      if (!type || !quantity || !total) return;
+      const count = Math.min(20, Math.max(1, Number.parseInt(quantity.value, 10) || 1));
+      quantity.value = count;
+      const amount = ticketPrices[type.value] * count;
+      total.textContent = new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
+    }
+
+    // Connexion publique Supabase : la sécurité repose sur les politiques RLS SQL.
+    const SUPABASE_URL = 'https://smuejzttycrqoosmolir.supabase.co';
+    const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_BWdlxRzaHiaTfJQS856nyw_Sc1TNcgE';
+    const supabaseClient = window.supabase?.createClient
+      ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)
+      : null;
+
+    async function sendBookingToWhatsApp(event) {
+      event.preventDefault();
+      const form = document.getElementById('booking-form');
+      const status = document.getElementById('booking-status');
+      const submitButton = form.querySelector('button[type="submit"]');
+      if (!form.reportValidity()) return;
+      if (!supabaseClient) {
+        status.textContent = 'Connexion indisponible. Rechargez la page et réessayez.';
+        status.className = 'text-xs text-center text-red-400';
+        return;
+      }
+
+      const name = document.getElementById('customer-name').value.trim();
+      const phone = document.getElementById('customer-phone').value.trim();
+      const type = document.getElementById('ticket-type').value;
+      const quantity = Number.parseInt(document.getElementById('ticket-quantity').value, 10);
+      const method = document.getElementById('payment-method').value;
+      const reference = document.getElementById('transfer-reference').value.trim();
+      const label = type === 'vip' ? 'Clients Debouts VIP' : 'Jolis Clients';
+      const amount = ticketPrices[type] * quantity;
+      const reservationCode = 'CHAUF-' + new Date().toISOString().slice(0,10).replaceAll('-', '') + '-' +
+        Math.random().toString(36).slice(2, 8).toUpperCase();
+
+      // Ouvre l’onglet pendant le clic utilisateur pour éviter le blocage des pop-ups après l’attente réseau.
+      const whatsappWindow = window.open('about:blank', '_blank');
+      submitButton.disabled = true;
+      submitButton.classList.add('opacity-60', 'cursor-not-allowed');
+      submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ENREGISTREMENT...';
+      status.textContent = 'Enregistrement de votre demande...';
+      status.className = 'text-xs text-center text-zinc-300';
+
+      try {
+        const { error } = await supabaseClient.from('reservations').insert([{
+          reservation_code: reservationCode,
+          customer_name: name,
+          customer_phone: phone,
+          ticket_type: type,
+          quantity: quantity,
+          payment_method: method,
+          transfer_reference: reference || null
+        }]);
+        if (error) throw error;
+
+        const message = [
+          'Bonjour, je viens d’enregistrer une demande de réservation pour LE CHAUFFEUR.',
+          '',
+          'Code de réservation : ' + reservationCode,
+          'Nom : ' + name,
+          'Téléphone WhatsApp : ' + phone,
+          'Catégorie : ' + label,
+          'Quantité : ' + quantity,
+          'Montant total : ' + new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA',
+          'Moyen de transfert choisi : ' + method,
+          reference ? 'Référence du transfert : ' + reference : 'Référence du transfert à communiquer après paiement.',
+          '',
+          'Merci de vérifier mon transfert et de confirmer ma réservation. Je comprends que le ticket définitif sera délivré après validation du paiement.'
+        ].join('\n');
+
+        status.textContent = 'Demande enregistrée ! Ouverture de WhatsApp...';
+        status.className = 'text-xs text-center text-emerald-400';
+        const url = 'https://wa.me/2250779398871?text=' + encodeURIComponent(message);
+        if (whatsappWindow) {
+          whatsappWindow.opener = null;
+          whatsappWindow.location.href = url;
+        } else {
+          status.textContent = 'Demande enregistrée. Autorisez les fenêtres pop-up puis cliquez à nouveau sur le bouton WhatsApp du site.';
+        }
+        form.reset();
+        updateBookingTotal();
+      } catch (error) {
+        if (whatsappWindow && !whatsappWindow.closed) whatsappWindow.close();
+        console.error('Erreur réservation Supabase:', error);
+        status.textContent = 'La demande n’a pas pu être enregistrée. Vérifiez la configuration SQL Supabase puis réessayez.';
+        status.className = 'text-xs text-center text-red-400';
+      } finally {
+        submitButton.disabled = false;
+        submitButton.classList.remove('opacity-60', 'cursor-not-allowed');
+        submitButton.innerHTML = '<i class="fa-brands fa-whatsapp text-xl"></i> ENVOYER MA DEMANDE SUR WHATSAPP';
+      }
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', () => {
+      initCountdown();
+      initScrollAnimations();
+      updateBookingTotal();
+    });
+  </script>
+</body>
+</html>
